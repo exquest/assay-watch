@@ -23,6 +23,8 @@ def problem(status: int | None, body: bytes, error: str | None = None) -> str | 
         h = json.loads(body)
     except ValueError:
         return "/health answered 200 with a body that is not JSON"
+    if not isinstance(h, dict):
+        return f"/health answered 200 with JSON that is not an object: {body[:100].decode(errors='replace')}"
     if h.get("ledger") != "ready":
         return f"/health answered 200 but the ledger is {h.get('ledger')!r}"
     return None
