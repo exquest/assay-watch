@@ -1,0 +1,17 @@
+name: watch
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # founder decision 2026-09-26: every 5 minutes; GitHub runs schedules best-effort
+  workflow_dispatch:
+permissions: {}
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Assay health
+        env:
+          PUSHOVER_APP_TOKEN: ${{ secrets.PUSHOVER_APP_TOKEN }}
+          PUSHOVER_USER_KEY: ${{ secrets.PUSHOVER_USER_KEY }}
+        run: python3 check.py
